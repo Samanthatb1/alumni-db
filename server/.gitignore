@@ -1,0 +1,13 @@
+# Secrets
+.env
+
+# Dependencies
+node_modules/
+.DS_Store
+
+# Logs
+*.log
+
+# Local data
+data/
+alumnidb.csv
