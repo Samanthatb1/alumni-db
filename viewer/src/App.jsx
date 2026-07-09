@@ -38,7 +38,6 @@ function normalizeRow(row) {
     university: row.university,
     current_company: row.current_company || '',
     linkedin_url: linkedinUrl,
-    linkedin_snippet: row.linkedin_snippet?.trim() || '',
     verified: row.verified === true,
   }
 }
@@ -436,9 +435,6 @@ function App() {
                     </a>
                   ) : (
                     '—'
-                  )}
-                  {row.linkedin_snippet && (
-                    <span className="snippet">{row.linkedin_snippet}</span>
                   )}
                 </span>
               </span>

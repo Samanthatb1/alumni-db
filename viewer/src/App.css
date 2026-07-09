@@ -274,12 +274,6 @@
   white-space: nowrap;
 }
 
-.snippet {
-  font-size: 0.78rem;
-  line-height: 1.35;
-  color: #666;
-}
-
 .verified-header {
   display: flex;
   align-items: center;
