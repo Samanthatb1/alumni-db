@@ -414,31 +414,35 @@ function App() {
 
           return (
             <li key={`${row.name}-${row.linkedin_url}-${i}`} className="row">
-              <span className="name">{row.name}</span>
-              <span className="university">{row.university || '—'}</span>
-              <span className="company">
-                {logoSrc && (
-                  <img
-                    className="company-logo"
-                    src={logoSrc}
-                    alt=""
-                  />
-                )}
-                <span>{companyDisplay}</span>
+              <span className="name" data-label="Name">{row.name}</span>
+              <span className="university" data-label="University">{row.university || '—'}</span>
+              <span className="company" data-label="Current Company">
+                <span className="field-value">
+                  {logoSrc && (
+                    <img
+                      className="company-logo"
+                      src={logoSrc}
+                      alt=""
+                    />
+                  )}
+                  <span>{companyDisplay}</span>
+                </span>
               </span>
-              <span className="link">
-                {row.linkedin_url ? (
-                  <a href={row.linkedin_url} target="_blank" rel="noopener noreferrer">
-                    {linkedinDisplayText(row.linkedin_url)}
-                  </a>
-                ) : (
-                  '—'
-                )}
-                {row.linkedin_snippet && (
-                  <span className="snippet">{row.linkedin_snippet}</span>
-                )}
+              <span className="link" data-label="LinkedIn">
+                <span className="field-value">
+                  {row.linkedin_url ? (
+                    <a href={row.linkedin_url} target="_blank" rel="noopener noreferrer">
+                      {linkedinDisplayText(row.linkedin_url)}
+                    </a>
+                  ) : (
+                    '—'
+                  )}
+                  {row.linkedin_snippet && (
+                    <span className="snippet">{row.linkedin_snippet}</span>
+                  )}
+                </span>
               </span>
-              <span className="verified">
+              <span className="verified" data-label="Verified">
                 <img
                   className="verified-icon"
                   src={isVerified ? '/verified.png' : '/unverified.png'}
