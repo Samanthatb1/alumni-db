@@ -33,12 +33,22 @@ const COMPANY_BLOCKLIST = new Set([
   'buffalo'
 ])
 
+// Mis-parsed company strings mapped to the correct company name.
+const COMPANY_OVERRIDES = new Map([
+  ['(formerly twenty percent games, llc)', 'Up at Night'],
+])
+
 function normalizeCompany(company) {
   return String(company || '').replace(/\s+/g, ' ').trim().toLowerCase()
 }
 
 function isBlockedCompany(company) {
   return COMPANY_BLOCKLIST.has(normalizeCompany(company))
+}
+
+function applyCompanyOverride(company) {
+  if (!company) return company
+  return COMPANY_OVERRIDES.get(normalizeCompany(company)) ?? company
 }
 
 export function loadEnv(envPath = ENV_PATH) {
@@ -155,6 +165,8 @@ export async function runRefresh({
         blank += 1
       }
     }
+
+    company = applyCompanyOverride(company)
 
     change(record, 'current_company', company)
     if (position && !String(record.current_position || '').trim()) {

@@ -47,9 +47,22 @@ function linkedinDisplayText(url) {
   return match ? decodeURIComponent(match[1]).replace(/\/$/, '') : url
 }
 
-function byCurrentCompany(a, b) {
-  const ca = a.current_company.trim()
-  const cb = b.current_company.trim()
+// Mis-parsed or legacy company strings mapped to the display/sort name.
+const COMPANY_ALIASES = {
+  '(formerly twenty percent games, llc)': 'Up at Night',
+  'up at night (formerly twenty percent games, llc)': 'Up at Night',
+}
+
+function sortableCompany(company, logoIndex) {
+  const trimmed = String(company || '').trim()
+  if (!trimmed) return ''
+  const aliased = COMPANY_ALIASES[trimmed.toLowerCase()] || trimmed
+  return logoIndex?.[aliased.toLowerCase()]?.canonicalName || aliased
+}
+
+function byCurrentCompany(a, b, logoIndex) {
+  const ca = sortableCompany(a.current_company, logoIndex)
+  const cb = sortableCompany(b.current_company, logoIndex)
   // Push rows without a company to the bottom.
   if (!ca && !cb) return 0
   if (!ca) return 1
@@ -91,7 +104,7 @@ function App() {
         return res.json()
       }),
     ]).then(([members, manifest]) => {
-      setRows(members.map((row) => normalizeRow(row)).sort(byCurrentCompany))
+      setRows(members.map((row) => normalizeRow(row)))
       setLogos(manifest)
       setAuthenticated(true)
       setError(null)
@@ -171,7 +184,7 @@ function App() {
         throw new Error(data.error || `Refresh failed (${res.status})`)
       }
       const members = await loadMembers()
-      setRows(members.map((row) => normalizeRow(row)).sort(byCurrentCompany))
+      setRows(members.map((row) => normalizeRow(row)))
     } catch (err) {
       setRefreshError(err.message)
     } finally {
@@ -223,9 +236,15 @@ function App() {
     return index
   }, [logos])
 
+  const sortedRows = useMemo(
+    () => [...rows].sort((a, b) => byCurrentCompany(a, b, logoIndex)),
+    [rows, logoIndex],
+  )
+
   const getLogoEntry = (company) => {
     if (!company) return null
-    return logoIndex[company.trim().toLowerCase()] || null
+    const key = COMPANY_ALIASES[company.trim().toLowerCase()] || company
+    return logoIndex[key.trim().toLowerCase()] || null
   }
 
   if (loading) return <p className="status">Loading…</p>
@@ -404,7 +423,7 @@ function App() {
       </div>
 
       <ul className="list">
-        {rows.map((row, i) => {
+        {sortedRows.map((row, i) => {
           const logoEntry = getLogoEntry(row.current_company)
           const logoSrc = logoEntry?.filename ? `/logos/${logoEntry.filename}` : null
           // Prefer the manifest's canonical casing so display is consistent.
