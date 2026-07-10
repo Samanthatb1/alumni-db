@@ -36,6 +36,7 @@ const COMPANY_BLOCKLIST = new Set([
 // Mis-parsed company strings mapped to the correct company name.
 const COMPANY_OVERRIDES = new Map([
   ['(formerly twenty percent games, llc)', 'Up at Night'],
+  ['ramp should simply be', 'Ramp'],
 ])
 
 function normalizeCompany(company) {

@@ -51,6 +51,7 @@ function linkedinDisplayText(url) {
 const COMPANY_ALIASES = {
   '(formerly twenty percent games, llc)': 'Up at Night',
   'up at night (formerly twenty percent games, llc)': 'Up at Night',
+  'ramp should simply be': 'Ramp',
 }
 
 function sortableCompany(company, logoIndex) {
