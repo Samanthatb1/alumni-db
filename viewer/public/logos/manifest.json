@@ -16,11 +16,11 @@
     "title": "Logos, Banners, and Buttons – Affirm US (English)"
   },
   "Afore Capital": {
-    "filename": "afore-capital.webp",
+    "filename": "aforecapital.jpeg",
     "image_url": "https://cdn.prod.website-files.com/62715edd66fdd76d96199f00/657076da07df81470a9fc302_image%20170%20(Traced).webp",
     "link": "https://www.afore.vc/",
-    "query": "\"Afore Capital\" logo",
-    "source": "www.afore.vc",
+    "query": "manual",
+    "source": "manual",
     "title": "Afore Capital"
   },
   "Air Liquide Digital and IT Risk Management": {
@@ -95,13 +95,12 @@
     "source": "Logos-World.net",
     "title": "Atlassian Logo, symbol, meaning, history, PNG, brand"
   },
-  "Auth0": {
-    "filename": "auth0.jpg",
-    "image_url": "https://2025.allthingsopen.org/wp-content/uploads/2025/07/Silver_Auth0.jpg",
-    "link": "https://2025.allthingsopen.org/sponsors/auth0",
-    "query": "\"Auth0\" logo",
-    "source": "All Things Open 2025",
-    "title": "Auth0 • All Things Open 2025"
+  "Auth0 (acquired by Okta)": {
+    "filename": "auth0.png",
+    "query": "manual",
+    "source": "manual",
+    "link": "https://auth0.com/",
+    "title": "Auth0"
   },
   "Bessemer Venture Partners": {
     "filename": "bessemer-venture-partners.jpg",
@@ -126,6 +125,13 @@
     "query": "\"Bloomberg LP\" logo",
     "source": "Alamy",
     "title": "Bloomberg logo hi-res stock photography and images - Alamy"
+  },
+  "Blizzard Entertainment": {
+    "filename": "BlizzardEntertainment.svg",
+    "query": "manual",
+    "source": "manual",
+    "link": "https://www.blizzard.com/",
+    "title": "Blizzard Entertainment"
   },
   "Box Vietnam": {
     "filename": "box-vietnam.jpg",
@@ -255,6 +261,13 @@
     "source": "cloverlabs.io",
     "title": "AI-First Product Studio: MVPs & Dev Teams | Clover Labs"
   },
+  "Cockroach Labs": {
+    "filename": "cockroachlabs.jpeg",
+    "query": "manual",
+    "source": "manual",
+    "link": "https://www.cockroachlabs.com/",
+    "title": "Cockroach Labs"
+  },
   "Coderbyte": {
     "filename": "coderbyte.png",
     "image_url": "https://approvethis.com/wp-content/uploads/2025/03/7ebd24b9-d522-451c-9c41-88c603e79861.png",
@@ -278,6 +291,13 @@
     "query": "\"Cognition\" logo",
     "source": "cognitionhq.com",
     "title": "Home - Cognition"
+  },
+  "Coinbase": {
+    "filename": "coinbase.png",
+    "query": "manual",
+    "source": "manual",
+    "link": "https://www.coinbase.com/",
+    "title": "Coinbase"
   },
   "Colias Group, LLC": {
     "filename": "colias-group-llc.jpg",
@@ -446,6 +466,13 @@
     "query": "\"Green River\" logo",
     "source": "Green River College",
     "title": "The Green River College Logo"
+  },
+  "Goldman Sachs": {
+    "filename": "GoldmanSachs.png",
+    "query": "manual",
+    "source": "manual",
+    "link": "https://www.goldmansachs.com/",
+    "title": "Goldman Sachs"
   },
   "Gusto": {
     "filename": "gusto.png",
@@ -670,6 +697,13 @@
     "query": "\"MITRE\" logo",
     "source": "Freebie Supply",
     "title": "Mitre Logo PNG Transparent & SVG Vector - Freebie Supply"
+  },
+  "MongoDB": {
+    "filename": "mongodb.svg",
+    "query": "manual",
+    "source": "manual",
+    "link": "https://www.mongodb.com/",
+    "title": "MongoDB"
   },
   "Major League Hacking": {
     "filename": "major-league-hacking.png",
@@ -951,6 +985,13 @@
     "source": "Rakuten Today",
     "title": "Rakuten's new logo underlines “One” corporate identity"
   },
+  "Ramp": {
+    "filename": "ramp.png",
+    "query": "manual",
+    "source": "manual",
+    "link": "https://ramp.com/",
+    "title": "Ramp"
+  },
   "Restaurant365": {
     "filename": "restaurant365.png",
     "image_url": "https://assets.themuse.com/uploaded/companies/11787/small_logo.png?v=fadf92230731554d6ec9748b7124e6aecf77ca70d11dc7de79fd713caa6d8adf",
@@ -1208,12 +1249,11 @@
     "title": "The Distributed AI Research Institute (DAIR) | LinkedIn"
   },
   "The New York Times": {
-    "filename": "the-new-york-times.png",
-    "image_url": "https://1000logos.net/wp-content/uploads/2017/04/New-York-Times-logo.png",
-    "link": "https://1000logos.net/new-york-times-logo/",
-    "query": "\"The New York Times\" logo",
-    "source": "1000 Logos",
-    "title": "New York Times Logo and symbol, meaning, history, PNG, brand"
+    "filename": "NewYorkTimes.png",
+    "query": "manual",
+    "source": "manual",
+    "link": "https://www.nytimes.com/",
+    "title": "The New York Times"
   },
   "Tidal": {
     "filename": "tidal.jpg",
@@ -1254,6 +1294,14 @@
     "query": "\"Truss\" logo",
     "source": "Salon of Pembroke Pines",
     "title": "Truss Professional - Salon of Pembroke Pines"
+  },
+  "Twilio": {
+    "filename": "twilio-inc.png",
+    "query": "curated",
+    "image_url": "https://cdn.worldvectorlogo.com/logos/twilio.svg",
+    "title": "Twilio",
+    "source": "Worldvectorlogo",
+    "link": "https://worldvectorlogo.com/logo/twilio"
   },
   "Twilio Inc.": {
     "filename": "twilio-inc.png",
@@ -1406,6 +1454,20 @@
     "query": "\"Zagaran, Inc.\" logo",
     "source": "GitHub",
     "title": "Zagaran, Inc. · GitHub"
+  },
+  "hackNY": {
+    "filename": "hackny.png",
+    "query": "manual",
+    "source": "manual",
+    "link": "https://www.hackny.org/",
+    "title": "hackNY"
+  },
+  "hackNY.org": {
+    "filename": "hackny.png",
+    "query": "manual",
+    "source": "manual",
+    "link": "https://www.hackny.org/",
+    "title": "hackNY"
   },
   "iD Tech Camps": {
     "filename": "id-tech-camps.png",

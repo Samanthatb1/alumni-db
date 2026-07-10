@@ -30,13 +30,44 @@ const COMPANY_BLOCKLIST = new Set([
   'computer science, statistics, finance',
   'improving training delivery',
   'air liquide digital and it risk management',
-  'buffalo'
+  'buffalo',
+  'have a nice day',
+  'collabing on next-gen projects',
+  'girl who helps dogs',
 ])
 
 // Mis-parsed company strings mapped to the correct company name.
 const COMPANY_OVERRIDES = new Map([
   ['(formerly twenty percent games, llc)', 'Up at Night'],
-  ['ramp should simply be', 'Ramp'],
+  ['veeral patel, ramp', 'Ramp'],
+  ['aws', 'Amazon Web Services (AWS)'],
+  ['aws elasticache', 'Amazon Web Services (AWS)'],
+  ['google nyc', 'Google'],
+  ['twilio inc.', 'Twilio'],
+  ['auth0', 'Auth0 (acquired by Okta)'],
+  ['hackny.org', 'hackNY'],
+  ['jpmorganchase', 'JPMorgan Chase & Co'],
+  ['microsoft ai (we\'re hiring!)', 'Microsoft'],
+  ['palantir technologies', 'Palantir'],
+  ['nyt', 'The New York Times'],
+  ['new york times', 'The New York Times'],
+  ['yobi ai', 'Yobi'],
+  ['namshi', 'Namshi.com'],
+  ['koodos', 'koodos labs (the creators of Shelf)'],
+  ['susquehanna', 'Susquehanna International Group, LLP (SIG)'],
+  ['fsh technologies', 'FSH Technologies (formerly Contenda)'],
+  ['christopher triolo, modernloop', 'ModernLoop'],
+  ['d. e. shaw group', 'The D. E. Shaw Group'],
+  ['u.s', 'U.S. Digital Corps'],
+  ['urbana-champaign', 'University of Illinois Urbana-Champaign'],
+  ['digital corps', 'U.S. Digital Corps'],
+  ['univ. of notre dame', 'University of Notre Dame'],
+  ['university of southern california', 'University of Southern California'],
+  ['ucla', 'UCLA'],
+  ['maverrik® with expertise in web design', 'MAVERRIK®'],
+  ['browser company', 'The Browser Company'],
+  ['koi (usekoi.com)', 'Koi'],
+  ['sky using computers', 'SkyLink'],
 ])
 
 function normalizeCompany(company) {

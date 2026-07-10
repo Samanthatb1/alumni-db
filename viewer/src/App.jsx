@@ -27,16 +27,37 @@ function apiFetch(path, options = {}) {
   return fetch(`${API_BASE}${path}`, { ...options, headers })
 }
 
+const COMPANY_BLOCKLIST = new Set([
+  '3x icpc regional finalist',
+  'computer science and linguistics',
+  'computer science, statistics, finance',
+  'improving training delivery',
+  'air liquide digital and it risk management',
+  'buffalo',
+  'have a nice day',
+  'collabing on next-gen projects',
+  'girl who helps dogs',
+])
+
+function normalizeCompany(company) {
+  return String(company || '').replace(/\s+/g, ' ').trim().toLowerCase()
+}
+
 function normalizeRow(row) {
   const linkedinUrl =
     row.linkedin_url?.trim() ||
     row.candidate_linkedin_urls?.split(';')[0]?.trim() ||
     ''
 
+  let currentCompany = row.current_company || ''
+  if (COMPANY_BLOCKLIST.has(normalizeCompany(currentCompany))) {
+    currentCompany = ''
+  }
+
   return {
     name: row.name,
     university: row.university,
-    current_company: row.current_company || '',
+    current_company: currentCompany,
     linkedin_url: linkedinUrl,
     verified: row.verified === true,
   }
@@ -51,7 +72,35 @@ function linkedinDisplayText(url) {
 const COMPANY_ALIASES = {
   '(formerly twenty percent games, llc)': 'Up at Night',
   'up at night (formerly twenty percent games, llc)': 'Up at Night',
-  'ramp should simply be': 'Ramp',
+  'veeral patel, ramp': 'Ramp',
+  aws: 'Amazon Web Services (AWS)',
+  'aws elasticache': 'Amazon Web Services (AWS)',
+  'google nyc': 'Google',
+  'twilio inc.': 'Twilio',
+  auth0: 'Auth0 (acquired by Okta)',
+  'hackny.org': 'hackNY',
+  jpmorganchase: 'JPMorgan Chase & Co',
+  'microsoft ai (we\'re hiring!)': 'Microsoft',
+  'palantir technologies': 'Palantir',
+  nyt: 'The New York Times',
+  'new york times': 'The New York Times',
+  'yobi ai': 'Yobi',
+  namshi: 'Namshi.com',
+  koodos: 'koodos labs (the creators of Shelf)',
+  susquehanna: 'Susquehanna International Group, LLP (SIG)',
+  'fsh technologies': 'FSH Technologies (formerly Contenda)',
+  'christopher triolo, modernloop': 'ModernLoop',
+  'd. e. shaw group': 'The D. E. Shaw Group',
+  'u.s': 'U.S. Digital Corps',
+  'urbana-champaign': 'University of Illinois Urbana-Champaign',
+  'digital corps': 'U.S. Digital Corps',
+  'univ. of notre dame': 'University of Notre Dame',
+  'university of southern california': 'University of Southern California',
+  ucla: 'UCLA',
+  'maverrik® with expertise in web design': 'MAVERRIK®',
+  'browser company': 'The Browser Company',
+  'koi (usekoi.com)': 'Koi',
+  'sky using computers': 'SkyLink',
 }
 
 function sortableCompany(company, logoIndex) {

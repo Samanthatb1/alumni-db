@@ -32,6 +32,9 @@ const KNOWN_SCHOOLS = new Set([
 const JUNK_COMPANY = new Set([
   'linkedin', '--', '—', '...', '', 'professional profile', 'profile',
   'self-employed', 'self employed', 'freelance', 'independent contractor',
+  'have a nice day',
+  'collabing on next-gen projects',
+  'girl who helps dogs',
 ])
 
 // Words that, when a headline is a single short phrase, indicate it's a job
