@@ -161,6 +161,19 @@ function isValidCompany(co, name, university) {
   return true
 }
 
+function stripLeadingName(company, name) {
+  // "{Member Name}, {Company}" is a common LinkedIn mis-parse.
+  if (!company || !name) return company
+  const match = /^([^,]+),\s*(.+)$/.exec(company)
+  if (!match) return company
+  if (normalize(match[1]) === normalize(name)) return match[2].trim()
+  return company
+}
+
+function parseCompany(raw, name) {
+  return stripLeadingName(cleanCompany(raw), name)
+}
+
 function acceptCompany(co, position, name, university, employmentContext) {
   // Validate a company, applying the student-vs-employee rule for schools.
   if (!isValidCompany(co, name, university)) return false
@@ -208,7 +221,7 @@ export function extract(snippet, name, university) {
   if (headline) {
     const m = /^(?<pos>.+?)\s+(?:\bat\b\s+|@\s*)(?<co>.+)$/.exec(headline)
     if (m && !/(\.\.\.|…)$/.test(m.groups.co.trimEnd())) {
-      const company = cleanCompany(m.groups.co)
+      const company = parseCompany(m.groups.co, name)
       const position = trimChars(m.groups.pos, ' .,|·•—–-')
       if (
         !isPrevious(position) &&
@@ -224,7 +237,7 @@ export function extract(snippet, name, university) {
     desc,
   )
   if (m) {
-    const company = cleanCompany(m.groups.co)
+    const company = parseCompany(m.groups.co, name)
     if (acceptCompany(company, 'researcher', name, university, true)) {
       return { company, position: positionFromHeadline(headline) }
     }
@@ -239,7 +252,7 @@ export function extract(snippet, name, university) {
       const before = desc.slice(0, um.index)
       const parts = before.split('. ')
       const segment = parts[parts.length - 1] // text after the prior sentence
-      const company = cleanCompany(words(segment).slice(-5).join(' '))
+      const company = parseCompany(words(segment).slice(-5).join(' '), name)
       if (acceptCompany(company, '', name, university, false)) {
         return { company, position: positionFromHeadline(headline) }
       }
@@ -250,7 +263,7 @@ export function extract(snippet, name, university) {
   // "{Name} - {Company} | LinkedIn"), cross-validated by appearing again in
   // the description body (e.g. in "{Company} {School}" or "Experience: ...").
   if (headline && !headline.includes('|') && !/\b(at|@)\b/.test(headline)) {
-    const candidate = cleanCompany(headline)
+    const candidate = parseCompany(headline, name)
     if (
       candidate &&
       !candidate.includes(',') && // commas usually mean a title or location
@@ -266,7 +279,7 @@ export function extract(snippet, name, university) {
   // Heuristic C: "{Title} at/@ {Company}" anywhere in the description.
   m = /\b(?:at|@)\s+(?<co>[A-Z][^·•\n]+?)(?:[.·•|]|\s—\s|\s-\s|$)/.exec(desc)
   if (m) {
-    const company = cleanCompany(m.groups.co)
+    const company = parseCompany(m.groups.co, name)
     if (acceptCompany(company, headline, name, university, true)) {
       return { company, position: positionFromHeadline(headline) }
     }

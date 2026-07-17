@@ -1184,6 +1184,12 @@
     "source": "1000 Logos",
     "title": "Stripe Logo and symbol, meaning, history, PNG"
   },
+  "Super": {
+    "filename": "super.png",
+    "query": "manual",
+    "source": "manual",
+    "title": "Super"
+  },
   "Susquehanna International Group, LLP (SIG)": {
     "filename": "susquehanna-international-group-llp-sig.jpg",
     "image_url": "https://mma.prnewswire.com/media/143911/susquehanna_growth_equity_logo.jpg?p=facebook",
@@ -1224,6 +1230,12 @@
     "source": "University Career Center & The President's Promise - University of Maryland",
     "title": "Ignite Fellowship Info Session | University Career Center & The President's  Promise"
   },
+  "Temporal": {
+    "filename": "temporal.png",
+    "query": "manual",
+    "source": "manual",
+    "title": "Temporal"
+  },
   "Tero": {
     "filename": "tero.png",
     "image_url": "https://cdn.prod.website-files.com/5f89de80a79eca00e1429f93/65bb9b88c84aeeb0553cdec5_thumb-tero-by-nearsure.png",
@@ -1239,6 +1251,12 @@
     "query": "\"TestDriver.ai\" logo",
     "source": "testdriver.ai",
     "title": "TestDriver - Automate the entire desktop with AI vision"
+  },
+  "The D. E. Shaw Group": {
+    "filename": "D._E._Shaw_&_Co._logo.png",
+    "query": "manual",
+    "source": "manual",
+    "title": "The D. E. Shaw Group"
   },
   "The Distributed AI Research Institute (DAIR)": {
     "filename": "the-distributed-ai-research-institute-dair.jpg",
@@ -1318,6 +1336,12 @@
     "query": "\"Tufts Medical Center\" logo",
     "source": "AORN Career Center",
     "title": "Tufts Medical Center Employer Profile - AORN Career Center"
+  },
+  "Two Sigma": {
+    "filename": "twosigma.png",
+    "query": "manual",
+    "source": "manual",
+    "title": "Two Sigma"
   },
   "U.S. Digital Corps": {
     "filename": "us-digital-corps.svg",
@@ -1407,6 +1431,12 @@
     "source": "B Corp",
     "title": "Women Entrepreneurs Global Inc. dba WE Global Studios - Certified B  Corporation - B Lab"
   },
+  "Walt Disney Imagineering": {
+    "filename": "waltdisney.png",
+    "query": "manual",
+    "source": "manual",
+    "title": "Walt Disney Imagineering"
+  },
   "Waterloo Women in Engineering (WiE)": {
     "filename": "waterloo-women-in-engineering-wie.png",
     "image_url": "https://uwaterloo.ca/women-in-engineering/sites/default/files/uploads/images/screen-shot-2022-11-23-at-2.29.57-pm.png",
@@ -1492,5 +1522,11 @@
     "query": "\"noon\" logo",
     "source": "Worldvectorlogo",
     "title": "noon Vector Logo - Download Free SVG Icon | Worldvectorlogo"
+  },
+  "xAI": {
+    "filename": "XAI.png",
+    "query": "manual",
+    "source": "manual",
+    "title": "xAI"
   }
 }

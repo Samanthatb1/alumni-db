@@ -52,6 +52,8 @@ function normalizeRow(row) {
   let currentCompany = row.current_company || ''
   if (COMPANY_BLOCKLIST.has(normalizeCompany(currentCompany))) {
     currentCompany = ''
+  } else {
+    currentCompany = COMPANY_ALIASES[normalizeCompany(currentCompany)] || currentCompany
   }
 
   return {
@@ -476,8 +478,7 @@ function App() {
         {sortedRows.map((row, i) => {
           const logoEntry = getLogoEntry(row.current_company)
           const logoSrc = logoEntry?.filename ? `/logos/${logoEntry.filename}` : null
-          // Prefer the manifest's canonical casing so display is consistent.
-          const companyDisplay = logoEntry?.canonicalName || row.current_company || '—'
+          const companyDisplay = sortableCompany(row.current_company, logoIndex) || '—'
           const isVerified = row.verified
 
           return (
