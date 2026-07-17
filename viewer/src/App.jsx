@@ -31,6 +31,8 @@ const COMPANY_BLOCKLIST = new Set([
   '3x icpc regional finalist',
   'computer science and linguistics',
   'computer science, statistics, finance',
+  'computer science degree',
+  'computer science & applied',
   'improving training delivery',
   'air liquide digital and it risk management',
   'buffalo',
@@ -39,8 +41,18 @@ const COMPANY_BLOCKLIST = new Set([
   'girl who helps dogs',
 ])
 
+// Strip decorative glyphs people add to their LinkedIn company (e.g. the Apple
+// logo character U+F8FF, emoji, and other pictographs) so the value matches the
+// canonical logo/manifest keys instead of falling through to raw text.
+function cleanCompany(company) {
+  return String(company || '')
+    .replace(/[\uF8FF\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\uFE0F\u200D]/gu, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
 function normalizeCompany(company) {
-  return String(company || '').replace(/\s+/g, ' ').trim().toLowerCase()
+  return cleanCompany(company).toLowerCase()
 }
 
 function normalizeRow(row) {
@@ -49,7 +61,7 @@ function normalizeRow(row) {
     row.candidate_linkedin_urls?.split(';')[0]?.trim() ||
     ''
 
-  let currentCompany = row.current_company || ''
+  let currentCompany = cleanCompany(row.current_company)
   if (COMPANY_BLOCKLIST.has(normalizeCompany(currentCompany))) {
     currentCompany = ''
   } else {
@@ -75,6 +87,7 @@ const COMPANY_ALIASES = {
   '(formerly twenty percent games, llc)': 'Up at Night',
   'up at night (formerly twenty percent games, llc)': 'Up at Night',
   'veeral patel, ramp': 'Ramp',
+  'bloomberg lp': 'Bloomberg',
   aws: 'Amazon Web Services (AWS)',
   'aws elasticache': 'Amazon Web Services (AWS)',
   'google nyc': 'Google',

@@ -28,6 +28,8 @@ const COMPANY_BLOCKLIST = new Set([
   '3x icpc regional finalist',
   'computer science and linguistics',
   'computer science, statistics, finance',
+  'computer science degree',
+  'computer science & applied',
   'improving training delivery',
   'air liquide digital and it risk management',
   'buffalo',

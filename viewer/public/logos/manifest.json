@@ -118,7 +118,7 @@
     "source": "LinkedIn",
     "title": "BillionToOne | LinkedIn"
   },
-  "Bloomberg LP": {
+  "Bloomberg": {
     "filename": "bloomberg-lp.jpg",
     "image_url": "https://c8.alamy.com/comp/2B4BAPJ/essen-north-rhine-westphalia-germany-bloomberg-logo-at-the-exhibition-stand-at-the-e-world-energy-water-trade-fair-bloomberg-lp-is-an-inform-2B4BAPJ.jpg",
     "link": "https://www.alamy.com/stock-photo/bloomberg-logo.html?pseudoid=2E755F78-3C92-44AF-AAA3-B67464B67BE4",
@@ -1159,6 +1159,12 @@
     "query": "\"Spring Health\" logo",
     "source": "Spring Health",
     "title": "Celebrating a New Season at Spring Health | Spring Health"
+  },
+  "Square": {
+    "filename": "square.jpg",
+    "query": "manual",
+    "source": "manual",
+    "title": "Square"
   },
   "Squarespace": {
     "filename": "squarespace.webp",
