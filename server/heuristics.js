@@ -232,8 +232,22 @@ export function extract(snippet, name, university) {
     }
   }
 
+  // Heuristic G: Google sometimes exposes LinkedIn's structured Experience
+  // section as "Experience ; {Role}. {Company}. {Month Year} ; ...".
+  let m =
+    /Experience\s*;\s*(?<pos>[^;]{1,100}?)\.\s*(?<co>[^;]{1,100}?)\.\s*(?:(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\s+\d{4}|\d{4}|Present)\b/i.exec(
+      desc,
+    )
+  if (m) {
+    const company = parseCompany(m.groups.co, name)
+    const position = trimChars(m.groups.pos, ' .,|·•—–-')
+    if (acceptCompany(company, position, name, university, true)) {
+      return { company, position }
+    }
+  }
+
   // Heuristic B: "Experience: {Company}" in the description (company only).
-  let m = /(?:Experience|Expérience|Erfahrung)\s*[:.]\s*(?<co>[^·•\n]+?)\s*(?:[·•]|$)/.exec(
+  m = /(?:Experience|Expérience|Erfahrung)\s*[:.]\s*(?<co>[^·•\n]+?)\s*(?:[·•]|$)/.exec(
     desc,
   )
   if (m) {

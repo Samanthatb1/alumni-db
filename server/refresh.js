@@ -129,10 +129,14 @@ export async function runRefresh({
   loadEnv(envPath)
   const apiKey = process.env.SERPER_API_KEY
   if (!apiKey) throw new Error(`Missing SERPER_API_KEY (set it in ${envPath})`)
+  const contextApiKey = process.env.CONTEXT_DEV_API_KEY || ''
 
   const collection = await getMembersCollection()
   const members = await collection.find({}).toArray()
-  const searcher = new SnippetSearcher(apiKey, { minIntervalMs })
+  const searcher = new SnippetSearcher(apiKey, {
+    minIntervalMs,
+    contextApiKey,
+  })
 
   // Track which fields actually change per document so we only write the diff.
   const updates = new Map() // key: _id string -> { _id, fields: {...} }

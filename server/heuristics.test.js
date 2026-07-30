@@ -14,3 +14,15 @@ test('does not treat a job title before Education as a company', () => {
     { company: '', position: '' },
   )
 })
+
+test('extracts company from a semicolon-formatted Experience snippet', () => {
+  const snippet =
+    'Alex Wheeler - Founder, connecting everyone in the care ... — ' +
+    'Experience ; Founder. CCN Health. May 2019 ; ' +
+    'UC Berkeley Coding Bootcamp Instructor. University of California, Berkeley.'
+
+  assert.deepEqual(
+    extract(snippet, 'Alex Wheeler', 'Boston University'),
+    { company: 'CCN Health', position: 'Founder' },
+  )
+})

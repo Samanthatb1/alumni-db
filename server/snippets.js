@@ -10,7 +10,10 @@
 // independent of how many lookups are in flight, and 429/5xx responses are
 // retried with exponential backoff (honoring Retry-After when present).
 
+import { extract } from './heuristics.js'
+
 const SERPER_URL = 'https://google.serper.dev/search'
+const CONTEXT_SEARCH_URL = 'https://api.context.dev/v1/web/search'
 const SLUG_RE = /linkedin\.com\/in\/([^/?#]+)/i
 
 export function linkedinSlug(url) {
@@ -21,22 +24,17 @@ export function linkedinSlug(url) {
 }
 
 export function buildQueries(record) {
-  // Prioritized query templates likely to surface the record's LinkedIn profile.
+  // Cap each member at two exact-profile searches: Experience usually exposes
+  // structured job history; the name query is the sole fallback.
   const name = String(record.name || '').trim()
   if (!name) return []
 
-  const queries = []
-  for (const key of ['university', 'previous_company', 'current_company']) {
-    const value = String(record[key] || '').trim()
-    if (value && value.toLowerCase() !== 'nan') {
-      queries.push(`"${name}" "${value}" LinkedIn`)
-    }
-  }
-  queries.push(`"${name}" LinkedIn`)
-  queries.push(`${name} LinkedIn`)
-
-  const seen = new Set()
-  return queries.filter((q) => (seen.has(q) ? false : seen.add(q)))
+  const slug = linkedinSlug(String(record.linkedin_url || ''))
+  if (!slug) return []
+  return [
+    `site:linkedin.com/in/${slug} "Experience"`,
+    `site:linkedin.com/in/${slug} "${name}"`,
+  ]
 }
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -57,12 +55,23 @@ export class SnippetSearcher {
   // minIntervalMs spaces every outgoing request globally (e.g. 200ms ≈ 5 req/s),
   // so even with many concurrent lookups the API sees a steady, safe request
   // rate. maxRetries controls 429/5xx backoff.
-  constructor(apiKey, { minIntervalMs = 200, maxRetries = 4 } = {}) {
+  constructor(
+    apiKey,
+    {
+      minIntervalMs = 200,
+      maxRetries = 4,
+      contextApiKey = '',
+      fetchImpl = fetch,
+    } = {},
+  ) {
     if (!apiKey) throw new Error('Missing SERPER_API_KEY')
     this.apiKey = apiKey
+    this.contextApiKey = contextApiKey
     this.minIntervalMs = minIntervalMs
     this.maxRetries = maxRetries
+    this.fetchImpl = fetchImpl
     this._nextSlotAt = 0
+    this.serperCreditsExhausted = false
   }
 
   async acquireSlot() {
@@ -75,15 +84,28 @@ export class SnippetSearcher {
   }
 
   async search(query) {
+    if (this.serperCreditsExhausted) return this.searchContext(query)
+
     // Always fetch fresh organic results as [{ link, title, snippet }, ...].
     for (let attempt = 0; ; attempt += 1) {
       await this.acquireSlot()
       try {
-        const response = await fetch(SERPER_URL, {
+        const response = await this.fetchImpl(SERPER_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'X-API-KEY': this.apiKey },
           body: JSON.stringify({ q: query, gl: 'us', hl: 'en' }),
         })
+
+        if (response.status === 400) {
+          const text = await response.text().catch(() => '')
+          if (/not enough credits/i.test(text)) {
+            this.serperCreditsExhausted = true
+            console.log('  Serper credits exhausted; switching to Context.dev')
+            return this.searchContext(query)
+          }
+          console.log(`  Serper failed (400): ${text.slice(0, 150)}`)
+          return []
+        }
 
         // Back off and retry on rate-limit / transient server errors.
         if (response.status === 429 || response.status >= 500) {
@@ -126,21 +148,99 @@ export class SnippetSearcher {
     }
   }
 
+  async searchContext(query) {
+    if (!this.contextApiKey) {
+      console.log(
+        '  Serper credits exhausted and CONTEXT_DEV_API_KEY is not configured',
+      )
+      return []
+    }
+
+    for (let attempt = 0; ; attempt += 1) {
+      await this.acquireSlot()
+      try {
+        const response = await this.fetchImpl(CONTEXT_SEARCH_URL, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${this.contextApiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query,
+            numResults: 10,
+            includeDomains: ['linkedin.com'],
+            country: 'us',
+            queryFanout: false,
+            markdownOptions: { enabled: false },
+          }),
+        })
+
+        if (response.status === 429 || response.status >= 500) {
+          if (attempt < this.maxRetries) {
+            const backoff = parseRetryAfter(response) ?? 1000 * 2 ** attempt
+            const jitter = Math.floor(Math.random() * 250)
+            console.log(
+              `  Context.dev ${response.status}; retry ${attempt + 1}/${this.maxRetries} in ${backoff + jitter}ms`,
+            )
+            await sleep(backoff + jitter)
+            continue
+          }
+          console.log(`  Context.dev ${response.status}; giving up on '${query}'`)
+          return []
+        }
+
+        if (!response.ok) {
+          const text = await response.text().catch(() => '')
+          console.log(
+            `  Context.dev failed (${response.status}): ${text.slice(0, 150)}`,
+          )
+          return []
+        }
+
+        const payload = await response.json()
+        const results = Array.isArray(payload?.results) ? payload.results : []
+        return results.map((item) => ({
+          link: String(item.url || ''),
+          title: String(item.title || ''),
+          snippet: String(item.description || ''),
+        }))
+      } catch (err) {
+        if (attempt < this.maxRetries) {
+          const backoff = 1000 * 2 ** attempt + Math.floor(Math.random() * 250)
+          console.log(`  Context.dev error '${err.message}'; retry in ${backoff}ms`)
+          await sleep(backoff)
+          continue
+        }
+        console.log(`  Context.dev request failed for '${query}': ${err.message}`)
+        return []
+      }
+    }
+  }
+
   async findSnippet(record) {
     // Re-search the person and return the snippet whose URL matches their slug.
     const target = linkedinSlug(String(record.linkedin_url || ''))
     if (!target) return ''
 
+    let firstExactMatch = ''
     for (const query of buildQueries(record)) {
       for (const result of await this.search(query)) {
         if (linkedinSlug(result.link) === target) {
           const title = (result.title || '').trim()
           const snippet = (result.snippet || '').trim()
-          if (title && snippet) return `${title} — ${snippet}`
-          return title || snippet
+          const candidate = title && snippet ? `${title} — ${snippet}` : title || snippet
+          if (!candidate) continue
+          if (!firstExactMatch) firstExactMatch = candidate
+
+          const parsed = extract(
+            candidate,
+            String(record.name || ''),
+            String(record.university || ''),
+          )
+          if (parsed.company) return candidate
         }
       }
     }
-    return ''
+    return firstExactMatch
   }
 }

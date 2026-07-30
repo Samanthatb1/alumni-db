@@ -45,7 +45,9 @@ Set these in `server/.env` (never commit it):
 - `MONGODB_URI` — required; your Atlas connection string (with the db password).
 - `MONGODB_DB` — optional; database name (default `hackny`).
 - `MONGODB_COLLECTION` — optional; collection name (default `members`).
-- `SERPER_API_KEY` — required for `/api/refresh` (Google search via Serper).
+- `SERPER_API_KEY` — required for `/api/refresh` (primary search via Serper).
+- `CONTEXT_DEV_API_KEY` — recommended; Context.dev web-search fallback used
+  when Serper reports that its credits are exhausted.
 - `CORS_ORIGIN` — optional; lock CORS to your frontend URL in production.
 - `PORT` — optional; defaults to `3001`.
 
