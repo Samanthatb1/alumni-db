@@ -91,6 +91,7 @@ const COMPANY_ALIASES = {
   aws: 'Amazon Web Services (AWS)',
   'aws elasticache': 'Amazon Web Services (AWS)',
   'google nyc': 'Google',
+  'netflix inkubator': 'Netflix',
   'twilio inc.': 'Twilio',
   auth0: 'Auth0 (acquired by Okta)',
   'hackny.org': 'hackNY',

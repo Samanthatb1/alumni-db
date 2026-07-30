@@ -45,6 +45,7 @@ const COMPANY_OVERRIDES = new Map([
   ['aws', 'Amazon Web Services (AWS)'],
   ['aws elasticache', 'Amazon Web Services (AWS)'],
   ['google nyc', 'Google'],
+  ['netflix inkubator', 'Netflix'],
   ['twilio inc.', 'Twilio'],
   ['auth0', 'Auth0 (acquired by Okta)'],
   ['hackny.org', 'hackNY'],
@@ -80,7 +81,7 @@ function isBlockedCompany(company) {
   return COMPANY_BLOCKLIST.has(normalizeCompany(company))
 }
 
-function applyCompanyOverride(company) {
+export function applyCompanyOverride(company) {
   if (!company) return company
   return COMPANY_OVERRIDES.get(normalizeCompany(company)) ?? company
 }
