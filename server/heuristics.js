@@ -253,7 +253,13 @@ export function extract(snippet, name, university) {
       const parts = before.split('. ')
       const segment = parts[parts.length - 1] // text after the prior sentence
       const company = parseCompany(words(segment).slice(-5).join(' '), name)
-      if (acceptCompany(company, '', name, university, false)) {
+      // Google sometimes formats a title-only headline as
+      // "{Title} · Education: {University}". In that shape, the text directly
+      // before the school is a role, not an employer.
+      if (
+        !TITLE_WORDS.test(company) &&
+        acceptCompany(company, '', name, university, false)
+      ) {
         return { company, position: positionFromHeadline(headline) }
       }
     }
