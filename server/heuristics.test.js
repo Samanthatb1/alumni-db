@@ -39,3 +39,25 @@ test('does not treat LinkedIn tenure text as a company', () => {
     { company: '', position: '' },
   )
 })
+
+test('does not treat an employer marked prev in a compound headline as current', () => {
+  const snippet =
+    'Example Member - Community member, prev: early eng at Example Corp — ' +
+    'Experience · Example Corp Graphic. Staff Software Engineer. Example Corp. ' +
+    '2022 - 2024 2 years.'
+
+  assert.deepEqual(
+    extract(snippet, 'Example Member', 'Example University'),
+    { company: '', position: '' },
+  )
+})
+
+test('extracts the current employer before a prev employment suffix', () => {
+  const snippet =
+    'Example Member - SWE @ Robinhood prev @ Meta — Software engineer building products.'
+
+  assert.deepEqual(
+    extract(snippet, 'Example Member', 'Example University'),
+    { company: 'Robinhood', position: 'SWE' },
+  )
+})

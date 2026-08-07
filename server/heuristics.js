@@ -192,7 +192,20 @@ function acceptCompany(co, position, name, university, employmentContext) {
 
 function isPrevious(position) {
   const cleaned = position.trim().toLowerCase().replace(/\.+$/, '')
-  return ['prev', 'previously', 'ex', 'former', 'formerly'].includes(cleaned)
+  return /(?:^|[\s,;|/()])(?:prev(?:iously)?|ex|former(?:ly)?)(?=\s*[:\-]|[\s,;|/()]|$)/i.test(
+    cleaned,
+  )
+}
+
+function currentHeadlineSegment(headline) {
+  // LinkedIn headlines often append job history, for example
+  // "SWE @ Robinhood prev @ Meta". Only the text before that marker describes
+  // the current role; if nothing employable precedes it, later heuristics may
+  // still inspect the structured snippet.
+  const marker = /(?:^|[\s,;|/()])(?:prev(?:iously)?|ex|former(?:ly)?)(?=\s*[:\-]|[\s,;|/()]|$)/i.exec(
+    headline,
+  )
+  return marker ? headline.slice(0, marker.index).trim() : headline
 }
 
 function universityRegex(university) {
@@ -218,12 +231,13 @@ export function extract(snippet, name, university) {
 
   const [title, desc] = splitTitleDesc(snippet)
   const headline = headlineFromTitle(title)
+  const currentHeadline = currentHeadlineSegment(headline)
 
   // Heuristic A: "{Title} at/@ {Company}" in the headline (gives both).
   // Skip when the company is truncated ("... at Foo ...") — the description
   // usually has the full name, so fall through to later heuristics.
-  if (headline) {
-    const m = /^(?<pos>.+?)\s+(?:\bat\b\s+|@\s*)(?<co>.+)$/.exec(headline)
+  if (currentHeadline) {
+    const m = /^(?<pos>.+?)\s+(?:\bat\b\s+|@\s*)(?<co>.+)$/.exec(currentHeadline)
     if (m && !/(\.\.\.|…)$/.test(m.groups.co.trimEnd())) {
       const company = parseCompany(m.groups.co, name)
       const position = trimChars(m.groups.pos, ' .,|·•—–-')
