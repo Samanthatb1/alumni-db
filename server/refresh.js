@@ -36,6 +36,7 @@ const COMPANY_BLOCKLIST = new Set([
   'have a nice day',
   'collabing on next-gen projects',
   'girl who helps dogs',
+  'sky using computers',
 ])
 
 // Mis-parsed company strings mapped to the correct company name.
@@ -70,7 +71,6 @@ const COMPANY_OVERRIDES = new Map([
   ['maverrik® with expertise in web design', 'MAVERRIK®'],
   ['browser company', 'The Browser Company'],
   ['koi (usekoi.com)', 'Koi'],
-  ['sky using computers', 'SkyLink'],
 ])
 
 function normalizeCompany(company) {
@@ -118,6 +118,7 @@ async function pMap(items, concurrency, worker) {
 
 export async function runRefresh({
   envPath = ENV_PATH,
+  memberName = '',
   // How many member lookups run at once. The global request spacing below is
   // what actually protects the rate limit; concurrency just hides per-request
   // latency so the run finishes faster.
@@ -132,7 +133,11 @@ export async function runRefresh({
   const contextApiKey = process.env.CONTEXT_DEV_API_KEY || ''
 
   const collection = await getMembersCollection()
-  const members = await collection.find({}).toArray()
+  const memberQuery = memberName ? { name: memberName } : {}
+  const members = await collection.find(memberQuery).toArray()
+  if (memberName && members.length === 0) {
+    throw new Error(`No member found with name: ${memberName}`)
+  }
   const searcher = new SnippetSearcher(apiKey, {
     minIntervalMs,
     contextApiKey,
@@ -243,7 +248,15 @@ export async function runRefresh({
 // Allow `node refresh.js` for local testing.
 const isMain = process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])
 if (isMain) {
-  runRefresh()
+  const nameFlagIndex = process.argv.indexOf('--name')
+  const memberName = nameFlagIndex === -1 ? '' : String(process.argv[nameFlagIndex + 1] || '').trim()
+  if (nameFlagIndex !== -1 && !memberName) {
+    console.error('Usage: node refresh.js [--name "Member Name"]')
+    process.exitCode = 1
+  }
+
+  const refreshPromise = process.exitCode ? Promise.resolve() : runRefresh({ memberName })
+  refreshPromise
     .catch((err) => {
       console.error(err)
       process.exitCode = 1

@@ -144,6 +144,10 @@ function isSchool(co) {
 function isValidCompany(co, name, university) {
   if (!co || JUNK_COMPANY.has(co.toLowerCase())) return false
   if (!/[A-Za-z]/.test(co)) return false
+  // LinkedIn experience snippets often place a tenure immediately before the
+  // education section (for example, "1 year 11 months · Hunter College").
+  // That text describes a duration and must never be accepted as an employer.
+  if (/^(?:\d+\s+years?|\d+\s+months?)(?:\s+\d+\s+months?)?$/i.test(co)) return false
   // Taglines / multi-entity blurbs rather than a single employer.
   if ([...'/:+'].some((ch) => co.includes(ch)) || co.includes('@')) return false
   if (words(co).length > 9) return false

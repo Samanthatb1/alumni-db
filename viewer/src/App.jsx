@@ -438,7 +438,7 @@ function App() {
                   className="feedback-textarea"
                   value={feedbackMessage}
                   onChange={(e) => setFeedbackMessage(e.target.value)}
-                  placeholder="e.g. Jane Doe's company should be Google, not Meta"
+                  placeholder="e.g. This member's company should be Google, not Meta"
                   rows={5}
                   maxLength={2000}
                   disabled={feedbackSubmitting}
@@ -475,13 +475,13 @@ function App() {
         <span>Current Company</span>
         <span>LinkedIn</span>
         <span className="verified-header">
-          Verified
+          High Confidence
           <span
             className="info-icon"
             tabIndex={0}
             role="img"
-            aria-label="What does verified mean?"
-            data-tooltip="Verified means the LinkedIn URL likely belongs to this hackNY member as it was double checked using either Linkedin connections or past hackNY data. It does NOT mean the current company is up to date, nor does it mean the individual confirmed the information is true."
+            aria-label="What does high confidence mean?"
+            data-tooltip="High Confidence means the LinkedIn URL likely belongs to this hackNY member, based on a double-check using either LinkedIn connections or past hackNY data. It does NOT mean the current company is up to date, nor does it mean the individual confirmed the information is true."
           >
             i
           </span>
@@ -522,12 +522,12 @@ function App() {
                   )}
                 </span>
               </span>
-              <span className="verified" data-label="Verified">
+              <span className="verified" data-label="High Confidence">
                 <img
                   className="verified-icon"
                   src={isVerified ? '/verified.png' : '/unverified.png'}
-                  alt={isVerified ? 'verified' : 'unverified'}
-                  title={isVerified ? 'verified' : 'unverified'}
+                  alt={isVerified ? 'high confidence' : 'not high confidence'}
+                  title={isVerified ? 'high confidence' : 'not high confidence'}
                 />
               </span>
             </li>

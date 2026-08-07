@@ -38,6 +38,12 @@ Run a one-off refresh from the CLI without the HTTP server:
 npm run refresh
 ```
 
+Refresh a single member by exact name:
+
+```bash
+npm run refresh -- --name "Sample Member"
+```
+
 ## Environment
 
 Set these in `server/.env` (never commit it):

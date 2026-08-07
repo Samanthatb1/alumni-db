@@ -6,13 +6,13 @@ import { SnippetSearcher, buildQueries } from './snippets.js'
 test('searches the exact LinkedIn Experience section first', () => {
   assert.deepEqual(
     buildQueries({
-      name: 'Tal Safran',
-      linkedin_url: 'http://linkedin.com/in/talsafran',
+      name: 'Sample Member',
+      linkedin_url: 'http://linkedin.com/in/sample-member',
       university: 'New York University',
     }),
     [
-      'site:linkedin.com/in/talsafran "Experience"',
-      'site:linkedin.com/in/talsafran "Tal Safran"',
+      'site:linkedin.com/in/sample-member "Experience"',
+      'site:linkedin.com/in/sample-member "Sample Member"',
     ],
   )
 })
@@ -26,8 +26,8 @@ test('stops after the Experience query yields a parseable company', async () => 
       queries.push(query)
       return Response.json({
         organic: [{
-          link: 'https://www.linkedin.com/in/alex-wheeler-233b89a8',
-          title: 'Alex Wheeler - Founder, connecting everyone in the care ...',
+          link: 'https://www.linkedin.com/in/example-founder',
+          title: 'Example Founder - Founder, connecting everyone in the care ...',
           snippet: 'Experience ; Founder. CCN Health. May 2019 ; Software Engineer. VTS, Inc.',
         }],
       })
@@ -35,14 +35,14 @@ test('stops after the Experience query yields a parseable company', async () => 
   })
 
   const snippet = await searcher.findSnippet({
-    name: 'Alex Wheeler',
+    name: 'Example Founder',
     university: 'Boston University',
-    linkedin_url: 'https://www.linkedin.com/in/alex-wheeler-233b89a8/',
+    linkedin_url: 'https://www.linkedin.com/in/example-founder/',
   })
 
   assert.match(snippet, /CCN Health/)
   assert.deepEqual(queries, [
-    'site:linkedin.com/in/alex-wheeler-233b89a8 "Experience"',
+    'site:linkedin.com/in/example-founder "Experience"',
   ])
 })
 
@@ -58,10 +58,10 @@ test('uses a broader query when the Experience snippet is not parseable', async 
         : 'Software Engineer at Example Corp.'
       return Response.json({
         organic: [{
-          link: 'https://www.linkedin.com/in/talsafran',
+          link: 'https://www.linkedin.com/in/sample-member',
           title: queries.length === 1
-            ? 'Tal Safran - Software Engineer | LinkedIn'
-            : 'Tal Safran - Software Engineer at Example Corp. | LinkedIn',
+            ? 'Sample Member - Software Engineer | LinkedIn'
+            : 'Sample Member - Software Engineer at Example Corp. | LinkedIn',
           snippet,
         }],
       })
@@ -69,9 +69,9 @@ test('uses a broader query when the Experience snippet is not parseable', async 
   })
 
   const snippet = await searcher.findSnippet({
-    name: 'Tal Safran',
+    name: 'Sample Member',
     university: 'New York University',
-    linkedin_url: 'https://www.linkedin.com/in/talsafran',
+    linkedin_url: 'https://www.linkedin.com/in/sample-member',
   })
 
   assert.match(snippet, /Example Corp/)
@@ -91,8 +91,8 @@ test('falls back to Context.dev after Serper credits are exhausted', async () =>
     return Response.json({
       results: [
         {
-          url: 'https://www.linkedin.com/in/talsafran',
-          title: 'Tal Safran - LinkedIn',
+          url: 'https://www.linkedin.com/in/sample-member',
+          title: 'Sample Member - LinkedIn',
           description: 'Engineering leader · Experience: Example Co',
         },
       ],
@@ -106,10 +106,10 @@ test('falls back to Context.dev after Serper credits are exhausted', async () =>
     maxRetries: 0,
   })
 
-  assert.deepEqual(await searcher.search('"Tal Safran" LinkedIn'), [
+  assert.deepEqual(await searcher.search('"Sample Member" LinkedIn'), [
     {
-      link: 'https://www.linkedin.com/in/talsafran',
-      title: 'Tal Safran - LinkedIn',
+      link: 'https://www.linkedin.com/in/sample-member',
+      title: 'Sample Member - LinkedIn',
       snippet: 'Engineering leader · Experience: Example Co',
     },
   ])
@@ -119,7 +119,7 @@ test('falls back to Context.dev after Serper credits are exhausted', async () =>
   assert.match(calls[1].url, /context\.dev/)
   assert.equal(calls[1].options.headers.Authorization, 'Bearer context-key')
   assert.deepEqual(JSON.parse(calls[1].options.body), {
-    query: '"Tal Safran" LinkedIn',
+    query: '"Sample Member" LinkedIn',
     numResults: 10,
     includeDomains: ['linkedin.com'],
     country: 'us',
