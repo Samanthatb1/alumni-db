@@ -1534,5 +1534,77 @@
     "query": "manual",
     "source": "manual",
     "title": "xAI"
+  },
+  "Airtable": {
+    "filename": "airtable.svg",
+    "query": "curated",
+    "image_url": "https://cdn.simpleicons.org/airtable",
+    "title": "Airtable",
+    "source": "Simple Icons",
+    "link": "https://www.airtable.com/company/trademark-guidelines"
+  },
+  "GitHub": {
+    "filename": "github.svg",
+    "query": "curated",
+    "image_url": "https://cdn.simpleicons.org/github/181717",
+    "title": "GitHub",
+    "source": "Simple Icons",
+    "link": "https://github.com/logos"
+  },
+  "John Deere": {
+    "filename": "john-deere.svg",
+    "query": "curated",
+    "image_url": "https://cdn.simpleicons.org/johndeere/367C2B",
+    "title": "John Deere",
+    "source": "Simple Icons",
+    "link": "https://www.deere.com/en-us/our-company/explore-john-deere/history-heritage/"
+  },
+  "Oculus VR": {
+    "filename": "oculus-vr.svg",
+    "query": "curated",
+    "image_url": "https://cdn.simpleicons.org/oculus/1C1E20",
+    "title": "Oculus VR",
+    "source": "Wikimedia Commons",
+    "link": "https://en.wikipedia.org/wiki/Reality_Labs"
+  },
+  "Qualcomm": {
+    "filename": "qualcomm.svg",
+    "query": "curated",
+    "image_url": "https://cdn.simpleicons.org/qualcomm/3253DC",
+    "title": "Qualcomm",
+    "source": "Simple Icons",
+    "link": "https://www.qualcomm.com/news/images"
+  },
+  "Recurse Center": {
+    "filename": "recurse-center.png",
+    "query": "curated",
+    "image_url": "https://commons.wikimedia.org/wiki/Special:Redirect/file/RC_logo_180x225.png",
+    "title": "Recurse Center",
+    "source": "Wikimedia Commons",
+    "link": "https://commons.wikimedia.org/wiki/File:RC_logo_180x225.png"
+  },
+  "Temporal Technologies": {
+    "filename": "temporal-technologies.svg",
+    "query": "curated",
+    "image_url": "https://cdn.simpleicons.org/temporal/000000",
+    "title": "Temporal Technologies",
+    "source": "Simple Icons",
+    "link": "https://temporal.io/"
+  },
+  "addy": {
+    "filename": "addy.ico",
+    "query": "curated",
+    "image_url": "https://addy.co/favicon.ico",
+    "title": "addy",
+    "source": "addy",
+    "link": "https://addy.co/"
+  },
+  "Faire": {
+    "filename": "faire.svg",
+    "query": "curated",
+    "image_url": "https://logotyp.us/file/faire.svg",
+    "title": "Faire",
+    "source": "Logotyp.us",
+    "link": "https://logotyp.us/get/faire/"
   }
 }

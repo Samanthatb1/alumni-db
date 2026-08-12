@@ -18,6 +18,12 @@ const DOWNLOAD_HEADERS = {
 
 /** @type {Record<string, { urls: string[], source: string, link: string, title: string }>} */
 const CURATED = {
+  Airtable: {
+    urls: ['https://cdn.simpleicons.org/airtable'],
+    source: 'Simple Icons',
+    link: 'https://www.airtable.com/company/trademark-guidelines',
+    title: 'Airtable',
+  },
   '(self employed game developer)': {
     urls: [
       'https://cdn.worldvectorlogo.com/logos/unity-69.svg',
@@ -156,12 +162,20 @@ const CURATED = {
   },
   Faire: {
     urls: [
+      'https://logotyp.us/file/faire.svg',
+      'https://cdn.simpleicons.org/faire',
       'https://1000logos.net/wp-content/uploads/2022/01/Faire-Logo.png',
       'https://www.faire.com/static/images/faire-logo.svg',
     ],
-    source: '1000 Logos',
-    link: 'https://1000logos.net/faire-logo/',
+    source: 'Logotyp.us',
+    link: 'https://logotyp.us/get/faire/',
     title: 'Faire',
+  },
+  GitHub: {
+    urls: ['https://cdn.simpleicons.org/github/181717'],
+    source: 'Simple Icons',
+    link: 'https://github.com/logos',
+    title: 'GitHub',
   },
   HAppening: {
     urls: [
@@ -190,6 +204,15 @@ const CURATED = {
     link: 'https://humata.ai/',
     title: 'Humata',
   },
+  'John Deere': {
+    urls: [
+      'https://cdn.simpleicons.org/johndeere/367C2B',
+      'https://commons.wikimedia.org/wiki/Special:Redirect/file/John_Deere_Logo_%E2%80%93_Flat_2_Color.svg',
+    ],
+    source: 'Simple Icons',
+    link: 'https://www.deere.com/en-us/our-company/explore-john-deere/history-heritage/',
+    title: 'John Deere',
+  },
   'MAVERRIK® with expertise in web design': {
     urls: [
       'https://maverrik.io/wp-content/uploads/2021/05/maverrik-logo.png',
@@ -214,6 +237,15 @@ const CURATED = {
     link: 'https://worldvectorlogo.com/logo/mongodb-icon-1',
     title: 'MongoDB',
   },
+  'Oculus VR': {
+    urls: [
+      'https://commons.wikimedia.org/wiki/Special:Redirect/file/Oculus_VR_logo.svg',
+      'https://cdn.simpleicons.org/oculus/1C1E20',
+    ],
+    source: 'Wikimedia Commons',
+    link: 'https://en.wikipedia.org/wiki/Reality_Labs',
+    title: 'Oculus VR',
+  },
   'Octane Lending': {
     urls: [
       'https://1000logos.net/wp-content/uploads/2022/01/Octane-Lending-Logo.png',
@@ -222,6 +254,28 @@ const CURATED = {
     source: '1000 Logos',
     link: 'https://www.octane.co/',
     title: 'Octane Lending',
+  },
+  Qualcomm: {
+    urls: ['https://cdn.simpleicons.org/qualcomm/3253DC'],
+    source: 'Simple Icons',
+    link: 'https://www.qualcomm.com/news/images',
+    title: 'Qualcomm',
+  },
+  'Recurse Center': {
+    urls: [
+      'https://commons.wikimedia.org/wiki/Special:Redirect/file/RC_logo_180x225.png',
+      'https://www.recurse.com/favicon.ico',
+      'https://www.recurse.com/static/logo.png',
+    ],
+    source: 'Wikimedia Commons',
+    link: 'https://commons.wikimedia.org/wiki/File:RC_logo_180x225.png',
+    title: 'Recurse Center',
+  },
+  'Temporal Technologies': {
+    urls: ['https://cdn.simpleicons.org/temporal/000000'],
+    source: 'Simple Icons',
+    link: 'https://temporal.io/',
+    title: 'Temporal Technologies',
   },
   'PDT Partners': {
     urls: [
@@ -491,10 +545,14 @@ async function downloadCurated(company, entry, manifest) {
 
 async function main() {
   const manifest = JSON.parse(fs.readFileSync(MANIFEST_PATH, 'utf8'))
+  const requested = new Set(process.argv.slice(2))
+  const entries = requested.size
+    ? Object.entries(CURATED).filter(([company]) => requested.has(company))
+    : Object.entries(CURATED)
   let ok = 0
   let fail = 0
 
-  for (const [company, entry] of Object.entries(CURATED)) {
+  for (const [company, entry] of entries) {
     process.stdout.write(`${company}... `)
     const success = await downloadCurated(company, entry, manifest)
     if (success) {
@@ -506,13 +564,16 @@ async function main() {
     }
   }
 
-  process.stdout.write('Microsoft (icon only)... ')
-  removeOldFiles('microsoft')
-  const msOk = await downloadCurated('Microsoft', MICROSOFT, manifest)
-  console.log(msOk ? `OK (${manifest.Microsoft.filename})` : 'FAILED')
+  let msOk = null
+  if (!requested.size || requested.has('Microsoft')) {
+    process.stdout.write('Microsoft (icon only)... ')
+    removeOldFiles('microsoft')
+    msOk = await downloadCurated('Microsoft', MICROSOFT, manifest)
+    console.log(msOk ? `OK (${manifest.Microsoft.filename})` : 'FAILED')
+  }
 
   fs.writeFileSync(MANIFEST_PATH, JSON.stringify(manifest, null, 2) + '\n')
-  console.log(`\nDone: ${ok}/${Object.keys(CURATED).length} new logos, Microsoft: ${msOk ? 'updated' : 'failed'}, ${fail} failed`)
+  console.log(`\nDone: ${ok}/${entries.length} new logos, Microsoft: ${msOk == null ? 'skipped' : msOk ? 'updated' : 'failed'}, ${fail} failed`)
 }
 
 main().catch((err) => {
