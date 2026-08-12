@@ -39,6 +39,11 @@ const COMPANY_BLOCKLIST = new Set([
   'have a nice day',
   'collabing on next-gen projects',
   'girl who helps dogs',
+  'prototyping spaces that unlock human',
+  'new york city metropolitan area',
+  'figuring out what\'s next',
+  'stanford',
+  'hunter college. 7 months',
 ])
 
 // Strip decorative glyphs people add to their LinkedIn company (e.g. the Apple
@@ -91,11 +96,14 @@ const COMPANY_ALIASES = {
   aws: 'Amazon Web Services (AWS)',
   'aws elasticache': 'Amazon Web Services (AWS)',
   'google nyc': 'Google',
+  'tesla energy': 'Tesla',
+  'cognition graphic': 'Cognition',
   'netflix inkubator': 'Netflix',
   'twilio inc.': 'Twilio',
   auth0: 'Auth0 (acquired by Okta)',
   'hackny.org': 'hackNY',
   jpmorganchase: 'JPMorgan Chase & Co',
+  'microsoft ai': 'Microsoft',
   'microsoft ai (we\'re hiring!)': 'Microsoft',
   'palantir technologies': 'Palantir',
   nyt: 'The New York Times',
