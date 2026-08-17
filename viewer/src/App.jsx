@@ -154,6 +154,7 @@ function App() {
   const [feedbackSubmitting, setFeedbackSubmitting] = useState(false)
   const [feedbackError, setFeedbackError] = useState(null)
   const [feedbackSent, setFeedbackSent] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
 
   const loadMembers = () =>
     apiFetch(`/api/members?t=${Date.now()}`).then((res) => {
@@ -306,6 +307,16 @@ function App() {
     () => [...rows].sort((a, b) => byCurrentCompany(a, b, logoIndex)),
     [rows, logoIndex],
   )
+
+  const filteredRows = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase()
+    if (!query) return sortedRows
+
+    return sortedRows.filter((row) =>
+      [row.name, row.university, row.current_company, row.linkedin_url]
+        .some((value) => String(value || '').toLowerCase().includes(query)),
+    )
+  }, [searchQuery, sortedRows])
 
   const getLogoEntry = (company) => {
     if (!company) return null
@@ -469,6 +480,19 @@ function App() {
         </div>
       )}
 
+      <div className="search-wrap">
+        <label className="sr-only" htmlFor="alumni-search">Search alumni</label>
+        <input
+          id="alumni-search"
+          className="search-input"
+          type="search"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search alumni…"
+          autoComplete="off"
+        />
+      </div>
+
       <div className="table-scroll">
         <div className="header row">
           <span>Name</span>
@@ -490,7 +514,7 @@ function App() {
         </div>
 
         <ul className="list">
-        {sortedRows.map((row, i) => {
+        {filteredRows.map((row, i) => {
           const logoEntry = getLogoEntry(row.current_company)
           const logoSrc = logoEntry?.filename ? `/logos/${logoEntry.filename}` : null
           const companyDisplay = sortableCompany(row.current_company, logoIndex) || '—'
