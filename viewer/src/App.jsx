@@ -162,6 +162,7 @@ function App() {
   const [feedbackSubmitting, setFeedbackSubmitting] = useState(false)
   const [feedbackError, setFeedbackError] = useState(null)
   const [feedbackSent, setFeedbackSent] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
 
   const loadMembers = () =>
     apiFetch(`/api/members?t=${Date.now()}`).then((res) => {
@@ -315,6 +316,16 @@ function App() {
     [rows, logoIndex],
   )
 
+  const filteredRows = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase()
+    if (!query) return sortedRows
+
+    return sortedRows.filter((row) =>
+      [row.name, row.university, row.current_company, row.linkedin_url]
+        .some((value) => String(value || '').toLowerCase().includes(query)),
+    )
+  }, [searchQuery, sortedRows])
+
   const getLogoEntry = (company) => {
     if (!company) return null
     const key = COMPANY_ALIASES[company.trim().toLowerCase()] || company
@@ -327,7 +338,7 @@ function App() {
     return (
       <div className="login-page">
         <form className="login-card" onSubmit={handleLogin}>
-          <h1>hackNY linkedins</h1>
+          <h1>alumni linkedins</h1>
           <input
             className="login-input"
             type="password"
@@ -351,7 +362,7 @@ function App() {
   return (
     <div className="app">
       <div className="topbar">
-        <h1>hackNY linkedins</h1>
+        <h1>alumni linkedins</h1>
         <div className="topbar-actions">
           <button
             className="feedback-btn"
@@ -477,27 +488,41 @@ function App() {
         </div>
       )}
 
-      <div className="header row">
-        <span>Name</span>
-        <span>University</span>
-        <span>Current Company</span>
-        <span>LinkedIn</span>
-        <span className="verified-header">
-          High Confidence
-          <span
-            className="info-icon"
-            tabIndex={0}
-            role="img"
-            aria-label="What does high confidence mean?"
-            data-tooltip="High Confidence means the LinkedIn URL likely belongs to this hackNY member, based on a double-check using either LinkedIn connections or past hackNY data. It does NOT mean the current company is up to date, nor does it mean the individual confirmed the information is true."
-          >
-            i
-          </span>
-        </span>
+      <div className="search-wrap">
+        <label className="sr-only" htmlFor="alumni-search">Search alumni</label>
+        <input
+          id="alumni-search"
+          className="search-input"
+          type="search"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search alumni…"
+          autoComplete="off"
+        />
       </div>
 
-      <ul className="list">
-        {sortedRows.map((row, i) => {
+      <div className="table-scroll">
+        <div className="header row">
+          <span>Name</span>
+          <span>University</span>
+          <span>Current Company</span>
+          <span>LinkedIn</span>
+          <span className="verified-header">
+            High Confidence
+            <span
+              className="info-icon"
+              tabIndex={0}
+              role="img"
+              aria-label="What does high confidence mean?"
+              data-tooltip="High Confidence means the LinkedIn URL likely belongs to this hackNY member, based on a double-check using either LinkedIn connections or past hackNY data. It does NOT mean the current company is up to date, nor does it mean the individual confirmed the information is true."
+            >
+              i
+            </span>
+          </span>
+        </div>
+
+        <ul className="list">
+        {filteredRows.map((row, i) => {
           const logoEntry = getLogoEntry(row.current_company)
           const logoSrc = logoEntry?.filename ? `/logos/${logoEntry.filename}` : null
           const companyDisplay = sortableCompany(row.current_company, logoIndex) || '—'
@@ -541,7 +566,8 @@ function App() {
             </li>
           )
         })}
-      </ul>
+        </ul>
+      </div>
     </div>
   )
 }
