@@ -319,7 +319,7 @@ function App() {
     return (
       <div className="login-page">
         <form className="login-card" onSubmit={handleLogin}>
-          <h1>hackNY linkedins</h1>
+          <h1>alumni linkedins</h1>
           <input
             className="login-input"
             type="password"
@@ -343,7 +343,7 @@ function App() {
   return (
     <div className="app">
       <div className="topbar">
-        <h1>hackNY linkedins</h1>
+        <h1>alumni linkedins</h1>
         <div className="topbar-actions">
           <button
             className="feedback-btn"
@@ -469,26 +469,27 @@ function App() {
         </div>
       )}
 
-      <div className="header row">
-        <span>Name</span>
-        <span>University</span>
-        <span>Current Company</span>
-        <span>LinkedIn</span>
-        <span className="verified-header">
-          High Confidence
-          <span
-            className="info-icon"
-            tabIndex={0}
-            role="img"
-            aria-label="What does high confidence mean?"
-            data-tooltip="High Confidence means the LinkedIn URL likely belongs to this hackNY member, based on a double-check using either LinkedIn connections or past hackNY data. It does NOT mean the current company is up to date, nor does it mean the individual confirmed the information is true."
-          >
-            i
+      <div className="table-scroll">
+        <div className="header row">
+          <span>Name</span>
+          <span>University</span>
+          <span>Current Company</span>
+          <span>LinkedIn</span>
+          <span className="verified-header">
+            High Confidence
+            <span
+              className="info-icon"
+              tabIndex={0}
+              role="img"
+              aria-label="What does high confidence mean?"
+              data-tooltip="High Confidence means the LinkedIn URL likely belongs to this hackNY member, based on a double-check using either LinkedIn connections or past hackNY data. It does NOT mean the current company is up to date, nor does it mean the individual confirmed the information is true."
+            >
+              i
+            </span>
           </span>
-        </span>
-      </div>
+        </div>
 
-      <ul className="list">
+        <ul className="list">
         {sortedRows.map((row, i) => {
           const logoEntry = getLogoEntry(row.current_company)
           const logoSrc = logoEntry?.filename ? `/logos/${logoEntry.filename}` : null
@@ -533,7 +534,8 @@ function App() {
             </li>
           )
         })}
-      </ul>
+        </ul>
+      </div>
     </div>
   )
 }

@@ -238,6 +238,10 @@
   padding: 0;
 }
 
+.table-scroll {
+  min-width: 0;
+}
+
 .company {
   min-width: 0;
 }
@@ -477,44 +481,41 @@
     padding: 0.75rem 1rem;
   }
 
-  .header.row {
-    display: none;
+  .table-scroll {
+    width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
   }
 
-  .row {
-    grid-template-columns: 1fr;
-    gap: 0.6rem;
-    padding: 1rem 0;
+  .table-scroll .row {
+    width: 680px;
+    grid-template-columns: 1.05fr 1.25fr 1.35fr 1.15fr 0.8fr;
+    gap: 0.75rem;
+    padding: 0.75rem 0.5rem;
   }
 
-  .row > span {
+  .table-scroll .header.row {
     display: grid;
-    grid-template-columns: minmax(6.5rem, 36%) 1fr;
-    gap: 0.5rem 0.75rem;
-    align-items: start;
-  }
-
-  .row > span::before {
-    content: attr(data-label);
-    font-weight: 600;
-    font-size: 0.72rem;
-    color: #666;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #fff;
+    font-size: 0.76rem;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
-    padding-top: 0.1rem;
+    letter-spacing: 0.02em;
   }
 
-  .row > span:not([data-label])::before {
+  .table-scroll .row > span {
+    min-width: 0;
+  }
+
+  .table-scroll .row > span::before {
     content: none;
   }
 
-  .verified {
-    justify-content: flex-start;
-  }
-
-  .link a {
-    white-space: normal;
-    word-break: break-word;
+  .table-scroll .verified {
+    justify-content: center;
   }
 
   .info-icon::after {
@@ -564,24 +565,7 @@
     font-size: 1.4rem;
   }
 
-  .row > span {
-    grid-template-columns: 1fr;
-    gap: 0.35rem;
-    text-align: center;
-    justify-items: center;
-  }
-
-  .row > span::before {
-    padding-top: 0;
-    text-align: center;
-    width: 100%;
-  }
-
-  .company .field-value {
-    justify-content: center;
-  }
-
-  .link .field-value {
-    align-items: center;
+  .table-scroll {
+    text-align: left;
   }
 }
