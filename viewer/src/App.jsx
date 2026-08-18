@@ -289,9 +289,11 @@ function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message }),
       })
-      const data = await res.json().catch(() => ({}))
-      if (!res.ok || !data.ok) {
-        throw new Error(data.error || `Submit failed (${res.status})`)
+      const data = await res.json().catch(() => null)
+      if (!res.ok || !data?.ok) {
+        throw new Error(
+          data?.error || 'Unable to send your message right now. Please try again in a moment.',
+        )
       }
       setFeedbackSent(true)
     } catch (err) {

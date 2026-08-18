@@ -10,6 +10,7 @@ from the `viewer/` frontend.
 - `GET /api/members` — returns the full member list (JSON).
 - `POST /api/refresh` — re-scrapes LinkedIn snippets and re-derives every
   member's current company. Can take 3–5 minutes.
+- `POST /api/feedback` — sends viewer feedback to a Slack incoming webhook.
 
 ## Data
 
@@ -54,6 +55,8 @@ Set these in `server/.env` (never commit it):
 - `SERPER_API_KEY` — required for `/api/refresh` (primary search via Serper).
 - `CONTEXT_DEV_API_KEY` — recommended; Context.dev web-search fallback used
   when Serper reports that its credits are exhausted.
+- `SLACK_FEEDBACK_WEBHOOK_URL` — Slack incoming webhook that receives viewer
+  feedback. Keep this URL secret.
 - `CORS_ORIGIN` — optional; lock CORS to your frontend URL in production.
 - `PORT` — optional; defaults to `3001`.
 

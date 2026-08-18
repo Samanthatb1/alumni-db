@@ -103,30 +103,39 @@ app.post('/api/feedback', requireAuth, async (req, res) => {
     return
   }
 
-  const webhookUrl = process.env.DISCORD_FEEDBACK_WEBHOOK_URL
+  const webhookUrl = process.env.SLACK_FEEDBACK_WEBHOOK_URL
   if (!webhookUrl) {
     res.status(500).json({ ok: false, error: 'Feedback is not configured' })
     return
   }
 
   try {
-    const discordRes = await fetch(webhookUrl, {
+    const slackRes = await fetch(webhookUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        content: `@everyone **hackNY alumni feedback**\n${message}`,
-        allowed_mentions: { parse: ['everyone'] },
+        text: `*hackNY alumni feedback*\n${message}`,
       }),
     })
 
-    if (!discordRes.ok) {
-      const detail = await discordRes.text().catch(() => '')
-      throw new Error(detail || `Discord returned ${discordRes.status}`)
+    if (!slackRes.ok) {
+      // Never forward an upstream response body to the client. It can contain
+      // a verbose HTML error page and is not useful to the person submitting.
+      console.error(`Slack feedback webhook returned ${slackRes.status}`)
+      res.status(503).json({
+        ok: false,
+        error: 'Unable to send your message right now. Please try again in a moment.',
+      })
+      return
     }
 
     res.json({ ok: true })
   } catch (err) {
-    res.status(500).json({ ok: false, error: err.message })
+    console.error('Slack feedback webhook failed:', err)
+    res.status(503).json({
+      ok: false,
+      error: 'Unable to send your message right now. Please try again in a moment.',
+    })
   }
 })
 
