@@ -57,6 +57,8 @@ Set these in `server/.env` (never commit it):
   when Serper reports that its credits are exhausted.
 - `SLACK_FEEDBACK_WEBHOOK_URL` — Slack incoming webhook that receives viewer
   feedback. Keep this URL secret.
+- `SLACK_FEEDBACK_USER_ID` — optional Slack member ID to mention when feedback
+  arrives, so that member receives a notification.
 - `CORS_ORIGIN` — optional; lock CORS to your frontend URL in production.
 - `PORT` — optional; defaults to `3001`.
 

@@ -110,11 +110,13 @@ app.post('/api/feedback', requireAuth, async (req, res) => {
   }
 
   try {
+    const slackUserId = process.env.SLACK_FEEDBACK_USER_ID?.trim()
+    const mention = slackUserId ? `<@${slackUserId}> ` : ''
     const slackRes = await fetch(webhookUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        text: `*hackNY alumni feedback*\n${message}`,
+        text: `${mention}*hackNY alumni feedback*\n${message}`,
       }),
     })
 
